@@ -1,0 +1,4 @@
+com\booking\reportservice\ReportServiceApplication.class
+com\booking\reportservice\controller\ReportController.class
+com\booking\reportservice\model\BookingReport.class
+com\booking\reportservice\model\Booking.class

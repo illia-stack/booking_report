@@ -27,7 +27,7 @@ public class ExcelReportService {
 
             Sheet sheet = workbook.createSheet("Bookings");
 
-            // Header-Array
+            // Header
             String[] headers = {
                     "ID",
                     "User ID",

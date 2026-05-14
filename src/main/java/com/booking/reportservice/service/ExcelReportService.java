@@ -19,6 +19,7 @@ public class ExcelReportService {
     }
 
     public byte[] generateExcelReport() throws Exception {
+        // Alle Buchungen aus der DB holen
         List<Booking> bookings = bookingRepository.findAll();
 
         try (Workbook workbook = new XSSFWorkbook();
@@ -26,8 +27,7 @@ public class ExcelReportService {
 
             Sheet sheet = workbook.createSheet("Bookings");
 
-            // Header
-            Row headerRow = sheet.createRow(0);
+            // Header-Array
             String[] headers = {
                     "ID",
                     "User ID",
@@ -42,18 +42,30 @@ public class ExcelReportService {
                     "Stripe Payment Intent ID",
                     "Payed At"
             };
+
+            // Header-Zeile erstellen
+            Row headerRow = sheet.createRow(0);
+
+            // Header Style: fett + zentriert
+            CellStyle headerStyle = workbook.createCellStyle();
+            Font font = workbook.createFont();
+            font.setBold(true);
+            headerStyle.setFont(font);
+            headerStyle.setAlignment(HorizontalAlignment.CENTER);
+
             for (int i = 0; i < headers.length; i++) {
                 Cell cell = headerRow.createCell(i);
                 cell.setCellValue(headers[i]);
+                cell.setCellStyle(headerStyle);
             }
 
-            // Data rows
+            // Datenzeilen
             int rowIdx = 1;
             for (Booking b : bookings) {
                 Row row = sheet.createRow(rowIdx++);
-                row.createCell(0).setCellValue(b.getId());
-                row.createCell(1).setCellValue(b.getUserId());
-                row.createCell(2).setCellValue(b.getPropertyId());
+                row.createCell(0).setCellValue(b.getId() != null ? b.getId() : 0);
+                row.createCell(1).setCellValue(b.getUserId() != null ? b.getUserId() : 0);
+                row.createCell(2).setCellValue(b.getPropertyId() != null ? b.getPropertyId() : 0);
                 row.createCell(3).setCellValue(b.getCheckIn() != null ? b.getCheckIn().toString() : "");
                 row.createCell(4).setCellValue(b.getCheckOut() != null ? b.getCheckOut().toString() : "");
                 row.createCell(5).setCellValue(b.getTotalPrice() != null ? b.getTotalPrice() : 0.0);
@@ -65,7 +77,14 @@ public class ExcelReportService {
                 row.createCell(11).setCellValue(b.getPayedAt() != null ? b.getPayedAt().toString() : "");
             }
 
+            // Spaltenbreite automatisch anpassen
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // Excel in ByteArray ausgeben
             workbook.write(out);
+            System.out.println("Exported " + bookings.size() + " bookings to Excel");
             return out.toByteArray();
         }
     }

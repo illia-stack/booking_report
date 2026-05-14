@@ -18,12 +18,12 @@ public class ReportController {
 
     @GetMapping("/api/reports/bookings")
     public ResponseEntity<byte[]> exportBookings() throws Exception {
-
         byte[] bytes = excelReportService.generateExcelReport();
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=booking-report.xlsx")
-                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .contentType(MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(bytes);
     }
 }

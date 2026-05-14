@@ -19,7 +19,6 @@ public class ExcelReportService {
     }
 
     public byte[] generateExcelReport() throws Exception {
-
         List<Booking> bookings = bookingRepository.findAll();
 
         try (Workbook workbook = new XSSFWorkbook();
@@ -33,6 +32,7 @@ public class ExcelReportService {
                 "ID", "User ID", "Property ID", "Check In", "Check Out",
                 "Total Price", "Status", "Created At", "Updated At"
             };
+
             for (int i = 0; i < headers.length; i++) {
                 Cell cell = headerRow.createCell(i);
                 cell.setCellValue(headers[i]);

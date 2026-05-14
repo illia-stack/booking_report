@@ -1,6 +1,5 @@
 package com.booking.reportservice.controller;
 
-import com.booking.reportservice.service.ExcelReportService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +15,10 @@ public class ExcelReportController {
         this.excelReportService = excelReportService;
     }
 
-    @GetMapping("/api/admin/export-bookings") // Pfad für dein PHP-Backend
+    @GetMapping("/api/reports/bookings")
     public ResponseEntity<byte[]> exportBookings() {
         try {
             byte[] excelData = excelReportService.generateExcelReport();
-
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=booking-report.xlsx")
                     .contentType(MediaType.parseMediaType(

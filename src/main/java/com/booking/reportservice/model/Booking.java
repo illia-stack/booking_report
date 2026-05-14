@@ -1,22 +1,143 @@
 package com.booking.reportservice.model;
 
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "bookings")
 public class Booking {
 
-public Long id;
-public Long user_id;
-public Long property_id;
+    @Id
+    private Long id;
 
-public String check_in;
-public String check_out;
+    @Column(name = "user_id")
+    private Long userId;
 
-public Double total_price;
+    @Column(name = "property_id")
+    private Long propertyId;
 
-public String status;
+    @Column(name = "check_in")
+    private LocalDate checkIn;
 
-public String created_at;
-public String updated_at;
+    @Column(name = "check_out")
+    private LocalDate checkOut;
 
-public String stripe_session_id;
-public String stripe_payment_intent_id;
+    @Column(name = "total_price")
+    private Double totalPrice;
 
+    private String status;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "stripe_session_id")
+    private String stripeSessionId;
+
+    @Column(name = "stripe_payment_intent_id")
+    private String stripePaymentIntentId;
+
+    @Column(name = "payed_at")
+    private LocalDateTime payedAt;
+
+    // GETTER + SETTER
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(Long propertyId) {
+        this.propertyId = propertyId;
+    }
+
+    public LocalDate getCheckIn() {
+        return checkIn;
+    }
+
+    public void setCheckIn(LocalDate checkIn) {
+        this.checkIn = checkIn;
+    }
+
+    public LocalDate getCheckOut() {
+        return checkOut;
+    }
+
+    public void setCheckOut(LocalDate checkOut) {
+        this.checkOut = checkOut;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getStripeSessionId() {
+        return stripeSessionId;
+    }
+
+    public void setStripeSessionId(String stripeSessionId) {
+        this.stripeSessionId = stripeSessionId;
+    }
+
+    public String getStripePaymentIntentId() {
+        return stripePaymentIntentId;
+    }
+
+    public void setStripePaymentIntentId(String stripePaymentIntentId) {
+        this.stripePaymentIntentId = stripePaymentIntentId;
+    }
+
+    public LocalDateTime getPayedAt() {
+        return payedAt;
+    }
+
+    public void setPayedAt(LocalDateTime payedAt) {
+        this.payedAt = payedAt;
+    }
 }

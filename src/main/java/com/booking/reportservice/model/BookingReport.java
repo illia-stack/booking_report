@@ -1,24 +1,46 @@
-package com.booking.reportservice.model;
+package com.booking.reportservice.controller;
 
-import java.util.List;
+import com.booking.reportservice.service.XmlReportService;
 
-public class BookingReport {
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
-private List<Booking> bookings;
+import org.springframework.web.bind.annotation.*;
 
-public BookingReport() {
-}
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
-public BookingReport(List<Booking> bookings) {
-    this.bookings = bookings;
-}
+@RestController
+@RequestMapping("/api/reports")
+public class ReportController {
 
-public List<Booking> getBookings() {
-    return bookings;
-}
+    private final XmlReportService xmlReportService;
 
-public void setBookings(List<Booking> bookings) {
-    this.bookings = bookings;
-}
+    public ReportController(
+        XmlReportService xmlReportService
+    ) {
+        this.xmlReportService = xmlReportService;
+    }
 
+    @GetMapping("/bookings")
+    public ResponseEntity<byte[]> generateReport()
+        throws Exception {
+
+        String filePath =
+            xmlReportService.generateXmlReport();
+
+        byte[] xmlContent =
+            Files.readAllBytes(
+                Paths.get(filePath)
+            );
+
+        return ResponseEntity.ok()
+            .header(
+                HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=booking-report.xml"
+            )
+            .contentType(MediaType.APPLICATION_XML)
+            .body(xmlContent);
+    }
 }

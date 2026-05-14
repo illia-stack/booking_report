@@ -2,6 +2,7 @@ package com.booking.reportservice.controller;
 
 import com.booking.reportservice.model.Booking;
 import com.booking.reportservice.model.BookingReport;
+import com.booking.reportservice.service.BookingService;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
@@ -17,26 +18,38 @@ import java.util.List;
 @RequestMapping("/report")
 public class ReportController {
 
-@PostMapping(
-    value = "/bookings",
-    produces = MediaType.APPLICATION_XML_VALUE
-)
-public ResponseEntity<String> generateReport(
-    @RequestBody List<Booking> bookings
-) throws Exception {
+    private final BookingService bookingService;
 
-    XmlMapper xmlMapper = new XmlMapper();
+    public ReportController(
+        BookingService bookingService
+    ) {
+        this.bookingService = bookingService;
+    }
 
-    BookingReport report = new BookingReport(bookings);
+    @GetMapping(
+        value = "/bookings/xml",
+        produces = MediaType.APPLICATION_XML_VALUE
+    )
+    public ResponseEntity<String> generateReport()
+        throws Exception {
 
-    String xml = xmlMapper.writeValueAsString(report);
+        List<Booking> bookings =
+            bookingService.getAllBookings();
 
-    return ResponseEntity.ok()
+        BookingReport report =
+            new BookingReport(bookings);
+
+        XmlMapper xmlMapper = new XmlMapper();
+        xmlMapper.findAndRegisterModules();
+
+        String xml =
+            xmlMapper.writeValueAsString(report);
+
+        return ResponseEntity.ok()
             .header(
                 HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=booking-report.xml"
             )
             .body(xml);
-}
-
+    }
 }

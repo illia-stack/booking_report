@@ -8,22 +8,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ReportController {
+public class ExcelReportController {
 
     private final ExcelReportService excelReportService;
 
-    public ReportController(ExcelReportService excelReportService) {
+    public ExcelReportController(ExcelReportService excelReportService) {
         this.excelReportService = excelReportService;
     }
 
-    @GetMapping("/api/reports/bookings")
-    public ResponseEntity<byte[]> exportBookings() throws Exception {
-        byte[] bytes = excelReportService.generateExcelReport();
+    @GetMapping("/api/admin/export-bookings") // Pfad für dein PHP-Backend
+    public ResponseEntity<byte[]> exportBookings() {
+        try {
+            byte[] excelData = excelReportService.generateExcelReport();
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=booking-report.xlsx")
-                .contentType(MediaType.parseMediaType(
-                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-                .body(bytes);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=booking-report.xlsx")
+                    .contentType(MediaType.parseMediaType(
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                    .body(excelData);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

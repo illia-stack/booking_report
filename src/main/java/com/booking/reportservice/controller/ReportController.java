@@ -8,32 +8,20 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 @RestController
 @RequestMapping("/api/reports")
 public class ReportController {
 
     private final XmlReportService xmlReportService;
 
-    public ReportController(
-        XmlReportService xmlReportService
-    ) {
+    public ReportController(XmlReportService xmlReportService) {
         this.xmlReportService = xmlReportService;
     }
 
     @GetMapping("/bookings")
-    public ResponseEntity<byte[]> generateReport()
-        throws Exception {
+    public ResponseEntity<String> generateReport() throws Exception {
 
-        String filePath =
-            xmlReportService.generateXmlReport();
-
-        byte[] xmlContent =
-            Files.readAllBytes(
-                Paths.get(filePath)
-            );
+        String xml = xmlReportService.generateXmlReport();
 
         return ResponseEntity.ok()
             .header(
@@ -41,6 +29,6 @@ public class ReportController {
                 "attachment; filename=booking-report.xml"
             )
             .contentType(MediaType.APPLICATION_XML)
-            .body(xmlContent);
+            .body(xml);
     }
 }

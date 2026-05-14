@@ -1,42 +1,14 @@
-package com.booking.reportservice.service;
+public String generateXmlReport() throws Exception {
 
-import com.booking.reportservice.model.BookingReport;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+    List<Booking> bookings =
+        bookingService.getAllBookings();
 
-import org.springframework.stereotype.Service;
+    BookingReport report =
+        new BookingReport(bookings);
 
-import java.io.File;
-import java.util.List;
+    XmlMapper xmlMapper = new XmlMapper();
 
-import com.booking.reportservice.model.Booking;
+    xmlMapper.findAndRegisterModules();
 
-@Service
-public class XmlReportService {
-
-    private final BookingService bookingService;
-
-    public XmlReportService(BookingService bookingService) {
-        this.bookingService = bookingService;
-    }
-
-    public String generateXmlReport() throws Exception {
-
-        List<Booking> bookings =
-            bookingService.getAllBookings();
-
-        BookingReport report =
-            new BookingReport(bookings);
-
-        XmlMapper xmlMapper = new XmlMapper();
-
-        String filePath =
-            "booking-report.xml";
-
-        xmlMapper.writeValue(
-            new File(filePath),
-            report
-        );
-
-        return filePath;
-    }
+    return xmlMapper.writeValueAsString(report);
 }

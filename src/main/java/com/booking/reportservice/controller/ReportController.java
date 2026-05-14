@@ -21,8 +21,10 @@ public class ReportController {
     @GetMapping("/api/admin/export-bookings")
     public ResponseEntity<byte[]> exportBookings() {
         try {
+            // Excel-Datei generieren
             byte[] excelData = excelReportService.generateExcelReport();
 
+            // Response zurückgeben
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=booking-report.xlsx")
                     .contentType(MediaType.parseMediaType(

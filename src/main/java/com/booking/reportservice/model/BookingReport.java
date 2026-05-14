@@ -1,46 +1,30 @@
-package com.booking.reportservice.controller;
+package com.booking.reportservice.model;
 
-import com.booking.reportservice.service.XmlReportService;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import java.util.List;
 
-import org.springframework.web.bind.annotation.*;
+@JacksonXmlRootElement(localName = "booking_report")
+public class BookingReport {
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+    @JacksonXmlElementWrapper(useWrapping = true)
+    @JacksonXmlProperty(localName = "booking")
+    private List<Booking> bookings;
 
-@RestController
-@RequestMapping("/api/reports")
-public class ReportController {
-
-    private final XmlReportService xmlReportService;
-
-    public ReportController(
-        XmlReportService xmlReportService
-    ) {
-        this.xmlReportService = xmlReportService;
+    public BookingReport() {
     }
 
-    @GetMapping("/bookings")
-    public ResponseEntity<byte[]> generateReport()
-        throws Exception {
+    public BookingReport(List<Booking> bookings) {
+        this.bookings = bookings;
+    }
 
-        String filePath =
-            xmlReportService.generateXmlReport();
+    public List<Booking> getBookings() {
+        return bookings;
+    }
 
-        byte[] xmlContent =
-            Files.readAllBytes(
-                Paths.get(filePath)
-            );
-
-        return ResponseEntity.ok()
-            .header(
-                HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=booking-report.xml"
-            )
-            .contentType(MediaType.APPLICATION_XML)
-            .body(xmlContent);
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 }

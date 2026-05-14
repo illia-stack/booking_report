@@ -1,8 +1,8 @@
 package com.booking.reportservice.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bookings")
@@ -43,7 +43,7 @@ public class Booking {
     @Column(name = "payed_at")
     private LocalDateTime payedAt;
 
-    // GETTER + SETTER
+    // GETTERS & SETTERS
 
     public Long getId() {
         return id;

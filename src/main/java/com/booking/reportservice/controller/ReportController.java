@@ -1,10 +1,6 @@
 package com.booking.reportservice.controller;
 
-import com.booking.reportservice.model.Booking;
-import com.booking.reportservice.model.BookingReport;
-import com.booking.reportservice.service.BookingService;
-
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.booking.reportservice.service.XmlReportService;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -12,44 +8,39 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @RestController
-@RequestMapping("/report")
+@RequestMapping("/api/reports")
 public class ReportController {
 
-    private final BookingService bookingService;
+    private final XmlReportService xmlReportService;
 
     public ReportController(
-        BookingService bookingService
+        XmlReportService xmlReportService
     ) {
-        this.bookingService = bookingService;
+        this.xmlReportService = xmlReportService;
     }
 
-    @GetMapping(
-        value = "/bookings/xml",
-        produces = MediaType.APPLICATION_XML_VALUE
-    )
-    public ResponseEntity<String> generateReport()
+    @GetMapping("/bookings")
+    public ResponseEntity<byte[]> generateReport()
         throws Exception {
 
-        List<Booking> bookings =
-            bookingService.getAllBookings();
+        String filePath =
+            xmlReportService.generateXmlReport();
 
-        BookingReport report =
-            new BookingReport(bookings);
-
-        XmlMapper xmlMapper = new XmlMapper();
-        xmlMapper.findAndRegisterModules();
-
-        String xml =
-            xmlMapper.writeValueAsString(report);
+        byte[] xmlContent =
+            Files.readAllBytes(
+                Paths.get(filePath)
+            );
 
         return ResponseEntity.ok()
             .header(
                 HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=booking-report.xml"
             )
-            .body(xml);
+            .contentType(MediaType.APPLICATION_XML)
+            .body(xmlContent);
     }
 }

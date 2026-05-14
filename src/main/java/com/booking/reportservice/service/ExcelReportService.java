@@ -29,10 +29,19 @@ public class ExcelReportService {
             // Header
             Row headerRow = sheet.createRow(0);
             String[] headers = {
-                "ID", "User ID", "Property ID", "Check In", "Check Out",
-                "Total Price", "Status", "Created At", "Updated At"
+                    "ID",
+                    "User ID",
+                    "Property ID",
+                    "Check In",
+                    "Check Out",
+                    "Total Price",
+                    "Status",
+                    "Created At",
+                    "Updated At",
+                    "Stripe Session ID",
+                    "Stripe Payment Intent ID",
+                    "Payed At"
             };
-
             for (int i = 0; i < headers.length; i++) {
                 Cell cell = headerRow.createCell(i);
                 cell.setCellValue(headers[i]);
@@ -51,6 +60,9 @@ public class ExcelReportService {
                 row.createCell(6).setCellValue(b.getStatus() != null ? b.getStatus() : "");
                 row.createCell(7).setCellValue(b.getCreatedAt() != null ? b.getCreatedAt().toString() : "");
                 row.createCell(8).setCellValue(b.getUpdatedAt() != null ? b.getUpdatedAt().toString() : "");
+                row.createCell(9).setCellValue(b.getStripeSessionId() != null ? b.getStripeSessionId() : "");
+                row.createCell(10).setCellValue(b.getStripePaymentIntentId() != null ? b.getStripePaymentIntentId() : "");
+                row.createCell(11).setCellValue(b.getPayedAt() != null ? b.getPayedAt().toString() : "");
             }
 
             workbook.write(out);

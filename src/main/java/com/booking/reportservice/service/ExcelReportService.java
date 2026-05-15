@@ -1,8 +1,11 @@
 package com.booking.reportservice.service;
 
 import com.booking.reportservice.model.Booking;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 @Service
@@ -14,28 +17,26 @@ public class ExcelReportService {
         this.bookingService = bookingService;
     }
 
-    public byte[] generateExcelReport(String userToken) throws Exception {
-        // Buchungen für den User abrufen (RLS)
-        List<Booking> bookings = bookingService.getBookings(userToken);
+    public byte[] generateExcelReport() throws Exception {
+        List<Booking> bookings = bookingService.getBookings();
 
-        // Excel-Export wie bisher
-        try (var workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook();
-             var out = new java.io.ByteArrayOutputStream()) {
+        try (XSSFWorkbook workbook = new XSSFWorkbook();
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
             var sheet = workbook.createSheet("Bookings");
 
             String[] headers = {
-                    "ID","User ID","Property ID","Check In","Check Out",
-                    "Total Price","Status","Created At","Updated At",
-                    "Stripe Session ID","Stripe Payment Intent ID","Payed At"
+                "ID","User ID","Property ID","Check In","Check Out",
+                "Total Price","Status","Created At","Updated At",
+                "Stripe Session ID","Stripe Payment Intent ID","Payed At"
             };
 
             var headerRow = sheet.createRow(0);
-            var headerStyle = workbook.createCellStyle();
             var font = workbook.createFont();
             font.setBold(true);
+            var headerStyle = workbook.createCellStyle();
             headerStyle.setFont(font);
-            headerStyle.setAlignment(org.apache.poi.ss.usermodel.HorizontalAlignment.CENTER);
+            headerStyle.setAlignment(HorizontalAlignment.CENTER);
 
             for (int i=0; i<headers.length; i++){
                 var cell = headerRow.createCell(i);
@@ -61,6 +62,7 @@ public class ExcelReportService {
             }
 
             for (int i = 0; i < headers.length; i++) sheet.autoSizeColumn(i);
+
             workbook.write(out);
             return out.toByteArray();
         }

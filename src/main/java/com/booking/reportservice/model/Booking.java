@@ -1,21 +1,48 @@
 package com.booking.reportservice.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "bookings")
 public class Booking {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "user_id")
     private Long userId;
+
+    @Column(name = "property_id")
     private Long propertyId;
+
+    @Column(name = "check_in")
     private LocalDate checkIn;
+
+    @Column(name = "check_out")
     private LocalDate checkOut;
+
+    @Column(name = "total_price")
     private Double totalPrice;
+
+    @Column(name = "status")
     private String status;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name = "stripe_session_id")
     private String stripeSessionId;
+
+    @Column(name = "stripe_payment_intent_id")
     private String stripePaymentIntentId;
+
+    @Column(name = "payed_at")
     private LocalDateTime payedAt;
 
     // GETTERS & SETTERS

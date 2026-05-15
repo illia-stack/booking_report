@@ -2,6 +2,7 @@ package com.booking.reportservice.controller;
 
 import com.booking.reportservice.service.ExcelReportService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,8 +18,13 @@ public class ReportController {
 
     // Excel-Download
     @GetMapping("/report/excel")
-    public void downloadExcel(HttpServletResponse response) throws Exception {
-        byte[] excelData = excelReportService.generateExcelReport();
+    public void downloadExcel(
+            @RequestHeader("Authorization") String authHeader,
+            HttpServletResponse response) throws Exception {
+
+        // Bearer Token aus Header extrahieren
+        String token = authHeader.replace("Bearer ", "");
+        byte[] excelData = excelReportService.generateExcelReport(token);
 
         response.setContentType(
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

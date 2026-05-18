@@ -42,8 +42,8 @@ public class Booking {
     @Column(name = "stripe_payment_intent_id")
     private String stripePaymentIntentId;
 
-    @Column(name = "payed_at")
-    private LocalDateTime payedAt;
+    @Column(name = "paid_at")
+    private LocalDateTime paidAt;
 
     // GETTERS & SETTERS
     public Long getId() { return id; }
@@ -68,6 +68,6 @@ public class Booking {
     public void setStripeSessionId(String stripeSessionId) { this.stripeSessionId = stripeSessionId; }
     public String getStripePaymentIntentId() { return stripePaymentIntentId; }
     public void setStripePaymentIntentId(String stripePaymentIntentId) { this.stripePaymentIntentId = stripePaymentIntentId; }
-    public LocalDateTime getPayedAt() { return payedAt; }
-    public void setPayedAt(LocalDateTime payedAt) { this.payedAt = payedAt; }
+    public LocalDateTime getPaidAt() { return paidAt; }
+    public void setPaidAt(LocalDateTime paidAt) { this.paidAt = paidAt; }
 }

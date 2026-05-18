@@ -58,7 +58,7 @@ public class ExcelReportService {
                 row.createCell(8).setCellValue(b.getUpdatedAt() != null ? b.getUpdatedAt().toString() : "");
                 row.createCell(9).setCellValue(b.getStripeSessionId() != null ? b.getStripeSessionId() : "");
                 row.createCell(10).setCellValue(b.getStripePaymentIntentId() != null ? b.getStripePaymentIntentId() : "");
-                row.createCell(11).setCellValue(b.getPayedAt() != null ? b.getPayedAt().toString() : "");
+                row.createCell(11).setCellValue(b.getPaidAt() != null ? b.getPaidAt().toString() : "");
             }
 
             for (int i = 0; i < headers.length; i++) sheet.autoSizeColumn(i);
